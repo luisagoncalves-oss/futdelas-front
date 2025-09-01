@@ -1,0 +1,7 @@
+{
+  "name": "FutDelas",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
