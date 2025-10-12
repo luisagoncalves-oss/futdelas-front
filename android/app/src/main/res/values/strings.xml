@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">FutDelas</string>
+    <string name="title_activity_main">FutDelas</string>
+    <string name="package_name">com.luisag.futdelas</string>
+    <string name="custom_url_scheme">com.luisag.futdelas</string>
+</resources>
