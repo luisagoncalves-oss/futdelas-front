@@ -1,2 +1,189 @@
-/* For information on how to create your own theme, please see:
-http://ionicframework.com/docs/theming/ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --ion-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Roboto', sans-serif;
+  
+  --ion-base-font-size: 16px;
+  
+  --ion-font-size-xs: 0.75rem;    
+  --ion-font-size-sm: 0.875rem;   
+  --ion-font-size-md: 1rem;       
+  --ion-font-size-lg: 1.125rem;  
+  --ion-font-size-xl: 1.25rem;   
+  --ion-font-size-xxl: 1.5rem;   
+  
+  --ion-font-weight-light: 300;
+  --ion-font-weight-regular: 400;
+  --ion-font-weight-medium: 500;
+  --ion-font-weight-semibold: 600;
+  --ion-font-weight-bold: 700;
+  
+  --ion-line-height-tight: 1.2;
+  --ion-line-height-normal: 1.4;
+  --ion-line-height-relaxed: 1.6;
+  
+  --ion-letter-spacing-tight: -0.01em;
+  --ion-letter-spacing-normal: 0;
+  --ion-letter-spacing-wide: 0.01em;
+}
+
+* {
+  font-family: inherit;
+}
+
+body {
+  font-family: var(--ion-font-family);
+  font-size: var(--ion-base-font-size);
+  font-weight: var(--ion-font-weight-regular);
+  line-height: var(--ion-line-height-normal);
+  letter-spacing: var(--ion-letter-spacing-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+
+
+.font-inter {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Roboto', sans-serif;
+}
+
+.font-weight-light {
+  font-weight: var(--ion-font-weight-light);
+}
+
+.font-weight-regular {
+  font-weight: var(--ion-font-weight-regular);
+}
+
+.font-weight-medium {
+  font-weight: var(--ion-font-weight-medium);
+}
+
+.font-weight-semibold {
+  font-weight: var(--ion-font-weight-semibold);
+}
+
+.font-weight-bold {
+  font-weight: var(--ion-font-weight-bold);
+}
+
+.text-xs {
+  font-size: var(--ion-font-size-xs);
+  line-height: var(--ion-line-height-tight);
+}
+
+.text-sm {
+  font-size: var(--ion-font-size-sm);
+  line-height: var(--ion-line-height-normal);
+}
+
+.text-md {
+  font-size: var(--ion-font-size-md);
+  line-height: var(--ion-line-height-normal);
+}
+
+.text-lg {
+  font-size: var(--ion-font-size-lg);
+  line-height: var(--ion-line-height-normal);
+}
+
+.text-xl {
+  font-size: var(--ion-font-size-xl);
+  line-height: var(--ion-line-height-normal);
+}
+
+.text-xxl {
+  font-size: var(--ion-font-size-xxl);
+  line-height: var(--ion-line-height-tight);
+}
+
+ion-card-title {
+  font-family: var(--ion-font-family);
+  font-weight: var(--ion-font-weight-semibold);
+  font-size: var(--ion-font-size-xl);
+  line-height: var(--ion-line-height-tight);
+  letter-spacing: var(--ion-letter-spacing-tight);
+}
+
+ion-card-subtitle {
+  font-family: var(--ion-font-family);
+  font-weight: var(--ion-font-weight-medium);
+  font-size: var(--ion-font-size-sm);
+  line-height: var(--ion-line-height-normal);
+  color: var(--ion-color-medium);
+}
+
+ion-card-content {
+  font-family: var(--ion-font-family);
+  font-size: var(--ion-font-size-md);
+  line-height: var(--ion-line-height-normal);
+}
+
+ion-item {
+  font-family: var(--ion-font-family);
+}
+
+ion-button {
+  font-family: var(--ion-font-family);
+  font-weight: var(--ion-font-weight-medium);
+  letter-spacing: var(--ion-letter-spacing-wide);
+}
+
+.text-long {
+  font-size: var(--ion-font-size-md);
+  line-height: var(--ion-line-height-relaxed);
+  max-width: 65ch;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    font-weight: var(--ion-font-weight-light);
+  }
+  
+  .text-long {
+    line-height: var(--ion-line-height-relaxed);
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --ion-base-font-size: 15px;
+    --ion-line-height-normal: 1.5;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --ion-base-font-size: 14px;
+    --ion-font-size-xs: 0.7rem;    
+    --ion-font-size-sm: 0.8rem;   
+    --ion-font-size-md: 0.9rem;    
+    --ion-font-size-lg: 1rem;      
+    --ion-font-size-xl: 1.1rem;    
+    --ion-font-size-xxl: 1.3rem;  
+  }
+  
+  ion-card-title {
+    font-size: var(--ion-font-size-lg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .smooth-font {
+    transition: font-size 0.2s ease, line-height 0.2s ease;
+  }
+}
+
+@media (prefers-contrast: high) {
+  body {
+    font-weight: var(--ion-font-weight-medium);
+  }
+}
+:root {
+  --ion-color-primary: #5706BA;
+}
+
+ion-label {
+  font-size: small;
+}

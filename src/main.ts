@@ -35,7 +35,10 @@ import '@ionic/vue/css/palettes/dark.system.css';
 import './theme/variables.css';
 
 const app = createApp(App)
-  .use(IonicVue)
+  .use(IonicVue, {
+    // Configuração para resolver o problema de URLs dos ícones
+    mode: 'md' // ou 'ios' dependendo da sua preferência
+  })
   .use(router);
 
 router.isReady().then(() => {
