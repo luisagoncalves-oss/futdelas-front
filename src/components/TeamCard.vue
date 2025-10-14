@@ -115,11 +115,16 @@ const handleToggleFavorite = async () => {
 .team-card {
   border-radius: 16px;
   margin: 8px;
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.2s ease;
-  background: white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.team-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(106, 11, 223, 0.08);
 }
 
 .team-card:active {
@@ -133,9 +138,8 @@ const handleToggleFavorite = async () => {
   overflow: hidden;
 }
 
-.team-flag-top .flag-stripe {
+.flag-stripe {
   flex: 1;
-  min-height: 6px;
 }
 
 .team-content {
@@ -155,87 +159,82 @@ const handleToggleFavorite = async () => {
 }
 
 .team-flag-vertical {
-  width: 50px;
-  height: 35px;
+  width: 48px;
+  height: 32px;
   border-radius: 8px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border: 2px solid #EDE9FE;
-  flex-shrink: 0;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
 }
 
 .flag-stripe-vertical {
   flex: 1;
-  min-height: 4px;
 }
 
 .team-details {
-  min-width: 0;
   flex: 1;
+  min-width: 0;
 }
 
 .team-name {
   margin: 0;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 600;
-  color: #1F2937;
+  color: #1f1f1f;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .team-code {
-  margin: 4px 0 0 0;
-  font-size: 12px;
-  color: #6B7280;
+  margin: 4px 0 0;
+  font-size: 0.8rem;
+  color: #777;
   font-weight: 500;
 }
 
 .favorite-btn {
-  width: 44px;
-  height: 44px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   border: none;
-  background: #F3F4F6;
+  background: #f5f5f7;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .favorite-btn:hover {
-  background: #E5E7EB;
+  background: rgba(106, 11, 223, 0.08);
 }
 
 .favorite-btn:active {
-  transform: scale(0.9);
+  transform: scale(0.92);
 }
 
 .favorite-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
-  transform: none;
 }
 
 .favorite-icon {
-  font-size: 20px;
-  color: #9CA3AF;
-  transition: all 0.2s ease;
+  font-size: 1.2rem;
+  color: #a0a0a0;
+  transition: color 0.2s ease;
 }
 
 .favorite-icon.favorited {
-  color: #EF4444;
+  color: #ef4444;
   animation: heartBeat 0.3s ease-in-out;
 }
 
 .loading-spinner {
   width: 20px;
   height: 20px;
-  color: #5706BA;
+  color: #6A0BDF;
 }
 
 @keyframes heartBeat {
@@ -248,23 +247,16 @@ const handleToggleFavorite = async () => {
   .team-content {
     padding: 12px;
   }
-  
   .team-flag-vertical {
     width: 40px;
-    height: 30px;
+    height: 28px;
   }
-  
   .team-name {
-    font-size: 14px;
+    font-size: 0.9rem;
   }
-  
   .favorite-btn {
-    width: 40px;
-    height: 40px;
-  }
-  
-  .favorite-icon {
-    font-size: 18px;
+    width: 38px;
+    height: 38px;
   }
 }
 </style>

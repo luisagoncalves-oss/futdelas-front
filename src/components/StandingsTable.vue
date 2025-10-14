@@ -80,97 +80,73 @@ const getPositionBadgeClass = (position: number): string => {
 </script>
 
 <style scoped>
-.card-title {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: var(--ion-color-dark);
-  margin-bottom: 12px;
+.card-classificacao {
+  border-radius: 16px;
+  margin: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #fff;
+  overflow: hidden;
 }
 
-.card-classificacao {
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  margin: 16px;
-  margin-bottom: 24px;
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1e1e1e;
+  margin-bottom: 6px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  padding-bottom: 8px;
 }
 
 .tabela-container {
   width: 100%;
-  border-radius: 8px;
   overflow: auto;
+  border-radius: 12px;
+  background: #fff;
 }
 
 .cabecalho-tabela {
   display: flex;
-  background-color: var(--ion-color-primary);
-  color: white;
-  padding: 12px 8px;
+  background: #f5f5f7;
+  color: #4b4b4b;
+  padding: 12px;
   font-weight: 600;
-  border-radius: 8px 8px 0 0;
-  min-width: 600px;
   font-size: 0.8rem;
+  letter-spacing: 0.2px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .linha-time {
   display: flex;
-  padding: 10px 8px;
   align-items: center;
-  border-bottom: 1px solid #f0f0f0;
-  min-width: 600px;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   font-size: 0.85rem;
+  transition: background 0.2s ease;
 }
 
-.linha-par {
-  background-color: #f9f9f9;
+.linha-time:hover {
+  background: rgba(106, 11, 223, 0.04);
 }
 
-.zona-libertadores {
-  background-color: rgba(0, 128, 0, 0.08);
-  border-left: 3px solid var(--ion-color-success);
-}
-
-.zona-rebaixamento {
-  background-color: rgba(235, 68, 90, 0.08);
-  border-left: 3px solid var(--ion-color-danger);
-}
-
-.coluna-posicao {
-  flex: 0.5;
+.coluna-posicao,
+.coluna-numero,
+.coluna-pontos {
   text-align: center;
   font-weight: 600;
-  display: flex;
-  justify-content: center;
 }
 
-.coluna-time {
-  flex: 3;
-  min-width: 0;
-}
-
-.coluna-numero {
-  flex: 0.8;
-  text-align: center;
-  font-weight: 500;
-}
-
-.coluna-pontos {
-  flex: 1;
-  text-align: center;
-  font-weight: 700;
-  color: var(--ion-color-primary);
-}
-
-.time-info {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+.coluna-posicao { flex: 0.5; }
+.coluna-time { flex: 3; min-width: 0; }
+.coluna-numero { flex: 0.8; color: #333; }
+.coluna-pontos { flex: 1; color: #6A0BDF; }
 
 .nome-time {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: 500;
+  color: #222;
 }
 
 .position-badge {
@@ -179,106 +155,14 @@ const getPositionBadgeClass = (position: number): string => {
   justify-content: center;
   width: 22px;
   height: 22px;
-  border-radius: 50%;
+  border-radius: 6px;
   font-size: 0.75rem;
-  font-weight: bold;
+  font-weight: 600;
   color: #fff;
 }
 
-.position-badge.qualification {
-  background: var(--ion-color-success);
-}
-
-.position-badge.playoff {
-  background: var(--ion-color-warning);
-}
-
-.position-badge.relegation {
-  background: var(--ion-color-danger);
-}
-
-.position-badge.neutral {
-  background: var(--ion-color-medium);
-}
-
-@media (max-width: 768px) {
-  .tabela-container {
-    overflow-x: auto;
-  }
-  
-  .cabecalho-tabela,
-  .linha-time {
-    min-width: 550px;
-    font-size: 0.75rem;
-  }
-  
-  .coluna-time {
-    flex: 2.5;
-  }
-  
-  .coluna-numero {
-    flex: 0.7;
-  }
-  
-  .nome-time {
-    max-width: 120px;
-  }
-}
-
-@media (max-width: 480px) {
-  .card-classificacao {
-    margin: 12px;
-    margin-bottom: 16px;
-  }
-  
-  .cabecalho-tabela,
-  .linha-time {
-    min-width: 500px;
-    padding: 8px 4px;
-  }
-  
-  .coluna-time {
-    flex: 2;
-  }
-  
-  .coluna-numero {
-    flex: 0.6;
-    font-size: 0.7rem;
-  }
-  
-  .nome-time {
-    max-width: 100px;
-    font-size: 0.75rem;
-  }
-  
-  .coluna-numero {
-    min-width: 24px;
-  }
-  
-  .coluna-pontos {
-    min-width: 30px;
-  }
-}
-
-@media (max-width: 360px) {
-  .cabecalho-tabela,
-  .linha-time {
-    min-width: 460px;
-    font-size: 0.7rem;
-  }
-  
-  .coluna-time {
-    flex: 1.8;
-  }
-  
-  .coluna-numero {
-    flex: 0.5;
-    min-width: 22px;
-  }
-  
-  .nome-time {
-    max-width: 90px;
-    font-size: 0.7rem;
-  }
-}
+.position-badge.qualification { background: #27ae60; }
+.position-badge.playoff { background: #f39c12; }
+.position-badge.relegation { background: #eb445a; }
+.position-badge.neutral { background: #a0a0a0; }
 </style>

@@ -5,7 +5,7 @@
     :class="[statusClass, { 'compact': compact }]"
   >
     <div class="match-content">
-      <div class="match-header" :class="statusClass">
+      <div class="match-header">
         <div class="match-status-badge">
           {{ statusText }}
         </div>
@@ -58,18 +58,6 @@
           <span class="team-name">{{ match.awayTeam?.name }}</span>
           <div class="team-stats" v-if="showScore">
             <span class="stat-value">{{ match.awayScore || 0 }}</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="match-footer" v-if="showFooter">
-        <div class="competition-info">
-          <div class="competition-icon">
-            <ion-icon :icon="trophyOutline"></ion-icon>
-          </div>
-          <div class="competition-details">
-            <span class="competition-name">{{ match.season?.name || 'Brasileirão Feminino' }}</span>
-            <span class="round-info" v-if="match.roundInfo?.round">Rodada {{ match.roundInfo.round }}</span>
           </div>
         </div>
       </div>
@@ -129,13 +117,7 @@ const isFinished = computed(() => {
 })
 
 const isLive = computed(() => {
-  return [31, 60, 70].includes(props.match.status?.code) // 1º tempo, 2º tempo, intervalo
-})
-
-const statusClass = computed(() => {
-  if (isFinished.value) return 'finished'
-  if (isLive.value) return 'live'
-  return 'scheduled'
+  return [31, 60, 70].includes(props.match.status?.code)
 })
 
 const statusText = computed(() => {
@@ -156,7 +138,6 @@ const showScore = computed(() => {
 
 const formatMatchTime = () => {
   if (!props.match?.startTimestamp) {
-    // Fallback para horário padrão se não houver timestamp
     return '19:00'
   }
   const date = new Date(props.match.startTimestamp * 1000)
@@ -169,111 +150,58 @@ const formatMatchTime = () => {
 
 <style scoped>
 .match-card {
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 4px 20px rgba(87, 6, 186, 0.1);
-  margin: 16px 0;
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin: 12px 0;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
   cursor: pointer;
-  border: 2px solid #F5F3FF;
-  position: relative;
-}
-
-.match-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #5706BA, #8B5CF6);
-  opacity: 0.8;
 }
 
 .match-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(87, 6, 186, 0.15);
-  border-color: #EDE9FE;
-}
-
-.match-card.live-match::before {
-  background: linear-gradient(90deg, #22C55E, #4ADE80);
-}
-
-.match-card.compact {
-  margin: 12px 0;
-}
-
-.match-content {
-  padding: 0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(106, 11, 223, 0.1);
 }
 
 .match-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 20px;
-  background: linear-gradient(90deg, #F5F3FF, #EDE9FE);
-  border-bottom: 1px solid #EDE9FE;
-}
-
-.match-header.live {
-  background: linear-gradient(90deg, #F0FDF4, #DCFCE7);
-}
-
-.match-header.finished {
-  background: linear-gradient(90deg, #F8FAFC, #F1F5F9);
+  background: #f7f7f9;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .match-status-badge {
-  padding: 6px 16px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.match-header:not(.finished) .match-status-badge {
-  background: #5706BA;
-  color: white;
-  box-shadow: 0 2px 8px rgba(87, 6, 186, 0.3);
-}
-
-.match-header.finished .match-status-badge {
-  background: #6B7280;
-  color: white;
-}
-
-.match-header.live .match-status-badge {
-  background: #22C55E;
-  color: white;
-  animation: pulse 2s infinite;
+  padding: 4px 10px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fff;
+  background: #27ae60;
 }
 
 .share-button {
-  background: rgba(87, 6, 186, 0.1);
   border: none;
+  background: transparent;
+  color: #6A0BDF;
+  font-size: 1.2rem;
   cursor: pointer;
-  padding: 8px;
-  border-radius: 10px;
-  color: #5706BA;
-  transition: all 0.3s ease;
+  transition: color 0.2s ease;
 }
 
 .share-button:hover {
-  background: #5706BA;
-  color: white;
-  transform: scale(1.1);
+  color: #4e09b2;
 }
 
 .teams-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 24px 20px;
-  gap: 20px;
+  padding: 16px 20px;
+  gap: 12px;
 }
 
 .team {
@@ -281,337 +209,116 @@ const formatMatchTime = () => {
   flex-direction: column;
   align-items: center;
   flex: 1;
-  gap: 12px;
-  position: relative;
-}
-
-.home-team {
-  align-items: flex-start;
-}
-
-.away-team {
-  align-items: flex-end;
+  gap: 8px;
 }
 
 .team-flag {
-  width: 70px;
-  height: 45px;
-  border-radius: 12px;
+  width: 56px;
+  height: 36px;
+  border-radius: 8px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  border: 2px solid #EDE9FE;
-  transition: all 0.3s ease;
-}
-
-.team:hover .team-flag {
-  transform: scale(1.05);
-  border-color: #5706BA;
-  box-shadow: 0 6px 20px rgba(87, 6, 186, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
 
 .flag-stripe {
   flex: 1;
-  min-height: 4px;
-  transition: all 0.3s ease;
 }
 
 .team-name {
+  font-size: 0.9rem;
   font-weight: 600;
-  font-size: 14px;
+  color: #1f1f1f;
   text-align: center;
-  max-width: 100px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: #1F2937;
-}
-
-.home-team .team-name {
-  text-align: left;
-}
-
-.away-team .team-name {
-  text-align: right;
-}
-
-.team-stats {
-  margin-top: 4px;
 }
 
 .stat-value {
-  font-size: 18px;
-  font-weight: 800;
-  color: #5706BA;
-  font-variant-numeric: tabular-nums;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #6A0BDF;
 }
 
 .match-center {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
-  min-width: 80px;
-}
-
-.score-divider {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.divider-line {
-  width: 20px;
-  height: 2px;
-  background: linear-gradient(90deg, #5706BA, #8B5CF6);
-  border-radius: 2px;
+  gap: 8px;
+  min-width: 70px;
 }
 
 .divider-x {
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 700;
-  color: #5706BA;
-  padding: 4px 8px;
-  background: #F5F3FF;
-  border-radius: 8px;
+  color: #6A0BDF;
 }
 
 .match-time {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 12px;
-  background: #F5F3FF;
-  border-radius: 12px;
-  color: #5706BA;
-  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 10px;
+  background: #f3f3f5;
+  color: #6A0BDF;
+  font-size: 0.8rem;
   font-weight: 600;
 }
 
-.time-icon {
-  font-size: 14px;
-}
-
 .match-footer {
+  background: #fafafa;
+  padding: 12px 16px;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 20px;
-  background: #FAFAFA;
-  border-top: 1px solid #F3F4F6;
 }
 
 .competition-info {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .competition-icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #5706BA, #8B5CF6);
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: #6A0BDF;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-}
-
-.competition-details {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+  color: #fff;
 }
 
 .competition-name {
-  font-size: 13px;
+  font-size: 0.85rem;
   font-weight: 600;
-  color: #5706BA;
+  color: #6A0BDF;
 }
 
 .round-info {
-  font-size: 11px;
-  color: #6B7280;
-}
-
-.match-actions {
-  display: flex;
-  gap: 8px;
-}
-
-.action-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  border: none;
-  background: #F5F3FF;
-  color: #5706BA;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-.action-btn:hover {
-  background: #5706BA;
-  color: white;
-  transform: scale(1.1);
-}
-
-@media (max-width: 768px) {
-  .team-flag {
-    width: 60px;
-    height: 40px;
-  }
-  
-  .team-name {
-    font-size: 13px;
-    max-width: 90px;
-  }
-  
-  .stat-value {
-    font-size: 16px;
-  }
-  
-  .teams-container {
-    padding: 20px;
-    gap: 16px;
-  }
+  font-size: 0.75rem;
+  color: #777;
 }
 
 @media (max-width: 480px) {
-  .match-card {
-    border-radius: 16px;
-    margin: 12px 0;
-  }
-  
   .teams-container {
-    padding: 16px;
-    gap: 12px;
+    padding: 12px;
   }
-  
   .team-flag {
-    width: 50px;
-    height: 35px;
+    width: 48px;
+    height: 30px;
   }
-  
   .team-name {
-    font-size: 12px;
-    max-width: 80px;
+    font-size: 0.8rem;
   }
-  
   .stat-value {
-    font-size: 16px;
+    font-size: 0.9rem;
   }
-  
-  .match-center {
-    min-width: 60px;
-  }
-  
-  .divider-line {
-    width: 15px;
-  }
-  
-  .divider-x {
-    font-size: 14px;
-    padding: 3px 6px;
-  }
-  
-  .match-footer {
-    padding: 12px 16px;
-  }
-  
-  .competition-icon {
-    width: 28px;
-    height: 28px;
-  }
-  
-  .competition-name {
-    font-size: 12px;
-  }
-  
-  .round-info {
-    font-size: 10px;
-  }
-}
-
-.compact .match-card {
-  margin: 8px 0;
-}
-
-.compact .team-flag {
-  width: 45px;
-  height: 30px;
-}
-
-.compact .team-name {
-  font-size: 11px;
-  max-width: 70px;
-}
-
-.compact .teams-container {
-  padding: 12px;
-}
-
-.compact .match-footer {
-  display: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  .match-card {
-    background: #1F2937;
-    border-color: #374151;
-  }
-  
-  .match-card::before {
-    opacity: 0.6;
-  }
-  
-  .match-header {
-    background: linear-gradient(90deg, #374151, #4B5563);
-    border-color: #4B5563;
-  }
-  
-  .team-name {
-    color: #F9FAFB;
-  }
-  
-  .match-footer {
-    background: #111827;
-    border-color: #374151;
-  }
-  
-  .action-btn {
-    background: #374151;
-    color: #8B5CF6;
-  }
-}
-
-@keyframes pulse {
-  0% { 
-    transform: scale(1);
-    box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
-  }
-  50% { 
-    transform: scale(1.05);
-    box-shadow: 0 4px 16px rgba(34, 197, 94, 0.5);
-  }
-  100% { 
-    transform: scale(1);
-    box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
-  }
-}
-
-.match-header.live .match-status-badge {
-  animation: pulse 2s ease-in-out infinite;
-}
-
-.team-flag,
-.share-button,
-.action-btn {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 </style>

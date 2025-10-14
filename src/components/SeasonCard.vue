@@ -1,7 +1,7 @@
 <template>
   <ion-card class="season-card">
     <ion-card-header>
-      <ion-card-title class="card-title">Temporada</ion-card-title>
+      <ion-card-title class="card-title">Brasileirão Feminino A1</ion-card-title>
     </ion-card-header>
     
     <ion-card-content>
@@ -9,38 +9,36 @@
         <div class="tournament-logo">
           <ion-avatar>
             <ion-img 
-              :src="tournamentLogoUrl" 
-              :alt="tournamentName"
-              @ionError="setDefaultImage"
+              src="assets/br_feminino.png" 
+              alt="Logo do Brasileirão"
             />
           </ion-avatar>
         </div>
 
         <div class="tournament-info">
-          <h2 class="tournament-name">{{ tournamentName }}</h2>
+          <h2 class="tournament-name">Temporada 2025</h2>
           
-          <ion-badge :color="statusColor">
-            {{ status }}
+          <ion-badge class="status-badge">
+            Finalizada
           </ion-badge>
 
           <div class="champion-section">
-            <ion-avatar>
+            <ion-avatar class="champion-avatar">
               <ion-img 
-                :src="championLogoUrl" 
+                src="assets/corinthians.png" 
                 alt="Campeão atual"
-                @ionError="setDefaultImage"
               />
             </ion-avatar>
-            <div class="champion-details">
-              <strong>{{ championName }}</strong>
-              <p>Atual campeão</p>
+            <div class="champion-info">
+              <strong class="champion-name">Corinthians</strong>
+              <p class="champion-label">Atual campeão</p>
             </div>
           </div>
         </div>
 
         <div class="teams-count">
           <ion-icon :icon="peopleOutline"></ion-icon>
-          <span>{{ totalTeams }} times</span>
+          <span>16 times</span>
         </div>
       </div>
     </ion-card-content>
@@ -59,64 +57,39 @@ import {
   IonIcon
 } from '@ionic/vue'
 import { peopleOutline } from "ionicons/icons";
-import { computed } from "vue";
-
-interface Props {
-  tournamentName?: string;
-  championName?: string;
-  tournamentLogoUrl?: string;
-  championLogoUrl?: string;
-  totalTeams?: number;
-  status?: "Em andamento" | "Finalizado" | "Não iniciado";
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  tournamentName: "Brasileirão Feminino A1",
-  championName: "Corinthians",
-  tournamentLogoUrl: "../resources/br_feminino.png",
-  championLogoUrl: "../resources/corinthians.png",
-  totalTeams: 16,
-  status: "Finalizado",
-});
-
-const statusColor = computed(() => {
-  const colors = {
-    "Em andamento": "success",
-    "Finalizado": "medium",
-    "Não iniciado": "medium"
-  };
-  return colors[props.status] || "medium";
-});
-
-const setDefaultImage = (event: any) => {
-  event.target.src = '/assets/images/default-logo.png';
-};
 </script>
 
 <style scoped>
 .season-card {
   border-radius: 16px;
-  margin: 16px 16px;
-  box-shadow: 0 4px 12px rgba(106, 11, 223, 0.1);
+  margin: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #fff;
+  transition: all 0.3s ease;
 }
 
 .card-title {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: var(--ion-color-dark);
-  margin-bottom: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1e1e1e;
+  margin-bottom: 6px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  padding-bottom: 8px;
 }
 
 .season-content {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 20px;
   flex-wrap: wrap;
 }
 
 .tournament-logo ion-avatar {
   width: 64px;
   height: 64px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .tournament-info {
@@ -125,35 +98,51 @@ const setDefaultImage = (event: any) => {
 }
 
 .tournament-name {
-  margin: 0 0 8px 0;
-  font-size: 1.1rem;
+  margin: 0 0 8px;
+  font-size: 1rem;
   font-weight: 600;
-  color: var(--ion-color-dark);
+  color: #2b2b2b;
+}
+
+.status-badge {
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  background: #27ae60;
+  color: white;
 }
 
 .champion-section {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-top: 12px;
-  padding: 12px;
-  background: var(--ion-color-light-tint);
-  border-radius: 12px;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 10px 12px;
+  background: #f7f7f9;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-.champion-section ion-avatar {
-  width: 40px;
-  height: 40px;
+.champion-avatar {
+  width: 48px;
+  height: 48px;
 }
 
-.champion-details {
-  font-size: 0.9rem;
+.champion-info {
+  text-align: left;
+  flex: 1;
 }
 
-.champion-details p {
-  margin: 2px 0 0 0;
+.champion-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1f1f1f;
+}
+
+.champion-label {
   font-size: 0.8rem;
-  color: var(--ion-color-medium);
+  color: #777;
 }
 
 .teams-count {
@@ -161,41 +150,32 @@ const setDefaultImage = (event: any) => {
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  padding: 8px;
-  background: var(--ion-color-primary);
+  padding: 10px 12px;
   border-radius: 12px;
-  color: #FFFF;
+  background: #f3f3f5;
+  color: #6A0BDF;
   font-weight: 600;
+  min-width: 70px;
+  text-align: center;
 }
 
 .teams-count ion-icon {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
 }
 
-@media (max-width: 768px) {
-  .season-content {
-    gap: 12px;
-  }
-  
-  .tournament-logo ion-avatar {
-    width: 56px;
-    height: 56px;
-  }
+.teams-count span {
+  font-size: 0.85rem;
 }
 
 @media (max-width: 480px) {
   .season-content {
     flex-direction: column;
     text-align: center;
-  }
-  
-  .tournament-info {
-    width: 100%;
+    gap: 16px;
   }
   
   .teams-count {
     flex-direction: row;
-    width: 100%;
     justify-content: center;
   }
 }
