@@ -9,7 +9,7 @@
         <div class="tournament-logo">
           <ion-avatar>
             <ion-img 
-              src="../../assets/br_feminino.png" 
+              src="/assets/images/br_feminino.png" 
               alt="Logo do Brasileirão"
             />
           </ion-avatar>
@@ -25,7 +25,7 @@
           <div class="champion-section">
             <ion-avatar class="champion-avatar">
               <ion-img 
-                src="../../assets/corinthians.png" 
+                src="/assets/images/corinthians.png" 
                 alt="Campeão atual"
               />
             </ion-avatar>
