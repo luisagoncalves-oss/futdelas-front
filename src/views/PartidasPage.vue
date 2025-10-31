@@ -56,471 +56,91 @@ import {
 import { onMounted, ref, computed } from 'vue';
 import MatchCard from '@/components/MatchCard.vue';
 import { Share } from '@capacitor/share';
-
-// Mock data baseado no JSON fornecido
-const mockEventsData = {
-  "events": [
-    {
-      "id": 13592672,
-      "homeTeam": {
-        "teamId": null,
-        "id": "312542",
-        "name": "Palmeiras",
-        "nameCode": "PAL",
-        "teamColors": {
-          "primary": "#339966",
-          "secondary": "#336633",
-          "text": "#336633"
-        },
-        "manager": null
-      },
-      "awayTeam": {
-        "teamId": null,
-        "id": "312739",
-        "name": "Fluminense",
-        "nameCode": "FLU",
-        "teamColors": {
-          "primary": "#660000",
-          "secondary": "#006633",
-          "text": "#006633"
-        },
-        "manager": null
-      },
-      "season": {
-        "id": 73097,
-        "name": "Brasileirão Feminino 2025",
-        "year": "2025"
-      },
-      "status": {
-        "code": 100,
-        "description": "Ended",
-        "type": "finished"
-      },
-      "roundInfo": {
-        "round": 14
-      }
-    },
-    {
-      "id": 13592668,
-      "homeTeam": {
-        "teamId": null,
-        "id": "342763",
-        "name": "Real Brasília FC",
-        "nameCode": "REA",
-        "teamColors": {
-          "primary": "#0a87f9",
-          "secondary": "#16115f",
-          "text": "#16115f"
-        },
-        "manager": null
-      },
-      "awayTeam": {
-        "teamId": null,
-        "id": "248726",
-        "name": "Grêmio",
-        "nameCode": "GRE",
-        "teamColors": {
-          "primary": "#3399ff",
-          "secondary": "#000033",
-          "text": "#000033"
-        },
-        "manager": null
-      },
-      "season": {
-        "id": 73097,
-        "name": "Brasileirão Feminino 2025",
-        "year": "2025"
-      },
-      "status": {
-        "code": 100,
-        "description": "Ended",
-        "type": "finished"
-      },
-      "roundInfo": {
-        "round": 14
-      }
-    },
-    {
-      "id": 13592670,
-      "homeTeam": {
-        "teamId": null,
-        "id": "396744",
-        "name": "EC Juventude",
-        "nameCode": "JUV",
-        "teamColors": {
-          "primary": "#374df5",
-          "secondary": "#374df5",
-          "text": "#ffffff"
-        },
-        "manager": null
-      },
-      "awayTeam": {
-        "teamId": null,
-        "id": "312545",
-        "name": "São Paulo",
-        "nameCode": "SAO",
-        "teamColors": {
-          "primary": "#ffffff",
-          "secondary": "#000000",
-          "text": "#000000"
-        },
-        "manager": null
-      },
-      "season": {
-        "id": 73097,
-        "name": "Brasileirão Feminino 2025",
-        "year": "2025"
-      },
-      "status": {
-        "code": 100,
-        "description": "Ended",
-        "type": "finished"
-      },
-      "roundInfo": {
-        "round": 14
-      }
-    },
-    {
-      "id": 13592669,
-      "homeTeam": {
-        "teamId": null,
-        "id": "312544",
-        "name": "Cruzeiro",
-        "nameCode": "CRU",
-        "teamColors": {
-          "primary": "#0033cc",
-          "secondary": "#ffffff",
-          "text": "#ffffff"
-        },
-        "manager": null
-      },
-      "awayTeam": {
-        "teamId": null,
-        "id": "248717",
-        "name": "Sport Recife",
-        "nameCode": "REC",
-        "teamColors": {
-          "primary": "#cc0000",
-          "secondary": "#000000",
-          "text": "#000000"
-        },
-        "manager": null
-      },
-      "season": {
-        "id": 73097,
-        "name": "Brasileirão Feminino 2025",
-        "year": "2025"
-      },
-      "status": {
-        "code": 100,
-        "description": "Ended",
-        "type": "finished"
-      },
-      "roundInfo": {
-        "round": 14
-      }
-    },
-    {
-      "id": 13592667,
-      "homeTeam": {
-        "teamId": null,
-        "id": "223371",
-        "name": "Ferroviária",
-        "nameCode": "FER",
-        "teamColors": {
-          "primary": "#9c271a",
-          "secondary": "#ffffff",
-          "text": "#ffffff"
-        },
-        "manager": null
-      },
-      "awayTeam": {
-        "teamId": null,
-        "id": "368297",
-        "name": "Red Bull Bragantino",
-        "nameCode": "RBB",
-        "teamColors": {
-          "primary": "#363636",
-          "secondary": "#d8d8d6",
-          "text": "#d8d8d6"
-        },
-        "manager": null
-      },
-      "season": {
-        "id": 73097,
-        "name": "Brasileirão Feminino 2025",
-        "year": "2025"
-      },
-      "status": {
-        "code": 100,
-        "description": "Ended",
-        "type": "finished"
-      },
-      "roundInfo": {
-        "round": 14
-      }
-    },
-    {
-      "id": 13592671,
-      "homeTeam": {
-        "teamId": null,
-        "id": "248722",
-        "name": "Flamengo",
-        "nameCode": "FLA",
-        "teamColors": {
-          "primary": "#ff0000",
-          "secondary": "#000000",
-          "text": "#000000"
-        },
-        "manager": null
-      },
-      "awayTeam": {
-        "teamId": null,
-        "id": "286246",
-        "name": "América Mineiro",
-        "nameCode": "AME",
-        "teamColors": {
-          "primary": "#056635",
-          "secondary": "#ffffff",
-          "text": "#ffffff"
-        },
-        "manager": null
-      },
-      "season": {
-        "id": 73097,
-        "name": "Brasileirão Feminino 2025",
-        "year": "2025"
-      },
-      "status": {
-        "code": 100,
-        "description": "Ended",
-        "type": "finished"
-      },
-      "roundInfo": {
-        "round": 14
-      }
-    },
-    {
-      "id": 13592666,
-      "homeTeam": {
-        "teamId": null,
-        "id": "284444",
-        "name": "3B Sport",
-        "nameCode": "3B",
-        "teamColors": {
-          "primary": "#0000ff",
-          "secondary": "#d90015",
-          "text": "#d90015"
-        },
-        "manager": null
-      },
-      "awayTeam": {
-        "teamId": null,
-        "id": "342756",
-        "name": "EC Bahia",
-        "nameCode": "BAH",
-        "teamColors": {
-          "primary": "#ffffff",
-          "secondary": "#333399",
-          "text": "#333399"
-        },
-        "manager": null
-      },
-      "season": {
-        "id": 73097,
-        "name": "Brasileirão Feminino 2025",
-        "year": "2025"
-      },
-      "status": {
-        "code": 100,
-        "description": "Ended",
-        "type": "finished"
-      },
-      "roundInfo": {
-        "round": 14
-      }
-    },
-    {
-      "id": 13592675,
-      "homeTeam": {
-        "teamId": null,
-        "id": "311632",
-        "name": "Internacional",
-        "nameCode": "INT",
-        "teamColors": {
-          "primary": "#cc0000",
-          "secondary": "#000000",
-          "text": "#000000"
-        },
-        "manager": null
-      },
-      "awayTeam": {
-        "teamId": null,
-        "id": "223182",
-        "name": "Corinthians",
-        "nameCode": "COR",
-        "teamColors": {
-          "primary": "#ffffff",
-          "secondary": "#000000",
-          "text": "#000000"
-        },
-        "manager": null
-      },
-      "season": {
-        "id": 73097,
-        "name": "Brasileirão Feminino 2025",
-        "year": "2025"
-      },
-      "status": {
-        "code": 100,
-        "description": "Ended",
-        "type": "finished"
-      },
-      "roundInfo": {
-        "round": 14
-      }
-    },
-    {
-      "id": 13592698,
-      "homeTeam": {
-        "teamId": null,
-        "id": "368297",
-        "name": "Red Bull Bragantino",
-        "nameCode": "RBB",
-        "teamColors": {
-          "primary": "#363636",
-          "secondary": "#d8d8d6",
-          "text": "#d8d8d6"
-        },
-        "manager": null
-      },
-      "awayTeam": {
-        "teamId": null,
-        "id": "284444",
-        "name": "3B Sport",
-        "nameCode": "3B",
-        "teamColors": {
-          "primary": "#0000ff",
-          "secondary": "#d90015",
-          "text": "#d90015"
-        },
-        "manager": null
-      },
-      "season": {
-        "id": 73097,
-        "name": "Brasileirão Feminino 2025",
-        "year": "2025"
-      },
-      "status": {
-        "code": 100,
-        "description": "Ended",
-        "type": "finished"
-      },
-      "roundInfo": {
-        "round": 15
-      }
-    },
-    {
-      "id": 13592679,
-      "homeTeam": {
-        "teamId": null,
-        "id": "312739",
-        "name": "Fluminense",
-        "nameCode": "FLU",
-        "teamColors": {
-          "primary": "#660000",
-          "secondary": "#006633",
-          "text": "#006633"
-        },
-        "manager": null
-      },
-      "awayTeam": {
-        "teamId": null,
-        "id": "342763",
-        "name": "Real Brasília FC",
-        "nameCode": "REA",
-        "teamColors": {
-          "primary": "#0a87f9",
-          "secondary": "#16115f",
-          "text": "#16115f"
-        },
-        "manager": null
-      },
-      "season": {
-        "id": 73097,
-        "name": "Brasileirão Feminino 2025",
-        "year": "2025"
-      },
-      "status": {
-        "code": 100,
-        "description": "Ended",
-        "type": "finished"
-      },
-      "roundInfo": {
-        "round": 15
-      },
-    }
-  ],
-  "hasNextPage": true
-};
+import { EventsResponse, Event } from '@/api/types/tournament-last-matches.type';
+import { TournamentService } from '@/api/tournament.service';
 
 const currentPage = ref(1);
-const allEvents = ref<any[]>([]); 
+const allEvents = ref<Event[]>([]); 
+const hasNextPageData = ref(false);
+const isLoading = ref(false);
 
 const paginatedEvents = computed(() => {
-  const startIndex = (currentPage.value - 1) * 10;
-  return allEvents.value.slice(startIndex, startIndex + 10);
+  return allEvents.value;
 });
 
 const hasNextPage = computed(() => {
-  return allEvents.value.length > currentPage.value * 10;
+  return hasNextPageData.value;
 });
 
-// Função mock para substituir a chamada de API
 const fetchTournamentLastMatches = async (page: number = 1) => {
   try {
-    // Simula delay de rede
-    await new Promise(resolve => setTimeout(resolve, 500));
+    isLoading.value = true;
     
-    if (page === 1) {
-      allEvents.value = mockEventsData.events;
-    }
+    const pageIndex = page - 1;
     
+    const response: EventsResponse = await TournamentService.getLastMatches(pageIndex);
+    
+    allEvents.value = response.events;
+    hasNextPageData.value = response.hasNextPage;
     currentPage.value = page;
+    
   } catch (error) {
     console.error("Erro ao buscar partidas:", error);
-    throw error;
+  } finally {
+    isLoading.value = false;
   }
 };
 
-const goToNextPage = () => {
+const goToNextPage = async () => {
   if (hasNextPage.value) {
-    currentPage.value++;
+    await fetchTournamentLastMatches(currentPage.value + 1);
   }
 };
 
-const goToPreviousPage = () => {
-  if (currentPage.value > 1) {
-    currentPage.value--;
+const goToPreviousPage = async () => {
+  if (currentPage.value >= 1) {
+    await fetchTournamentLastMatches(currentPage.value - 1);
   }
 };
 
-const share = async (match: any) => {
+const share = async (match: Event) => {
   try {
-    const shareText = `⚽ ${match.homeTeam.name} vs ${match.awayTeam.name}
-🏆 ${match.season.name}
-📅 Rodada ${match.roundInfo.round}
-✅ ${match.status.description}`;
+    const statusMap: Record<string, string> = {
+      'Ended': 'Encerrado',
+      'Finished': 'Encerrado',
+      'Live': 'Ao Vivo',
+      'Scheduled': 'Agendado',
+      'Postponed': 'Adiado',
+      'Cancelled': 'Cancelado'
+    };
+
+    const status = statusMap[match.status.description] || match.status.description;
+    
+    const placar = match.homeScore && match.awayScore 
+      ? `${match.homeScore.display} × ${match.awayScore.display}`
+      : 'vs';
+
+    const shareText = `${match.homeTeam.name} ${placar} ${match.awayTeam.name}
+
+${match.season.name} • Rodada ${match.roundInfo.round}
+Status: ${status}
+
+───
+Acompanhe o campeonato completo no FutDelas
+Resultados, classificação e estatísticas do futebol feminino brasileiro
+
+#FutebolFeminino #BrasileirãoFeminino`;
 
     await Share.share({
-      title: 'Resultado da Partida',
+      title: 'FutDelas | Brasileirão Feminino',
       text: shareText,
+      dialogTitle: 'Compartilhar'
     });
     
   } catch (e) {
-    console.log("Erro ao compartilhar:", e);
+    console.error("Erro ao compartilhar partida:", e);
   }
-}
+};
 
 onMounted(() => {
   fetchTournamentLastMatches(1);
@@ -528,7 +148,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* Estilos para a paginação */
 ion-footer {
   background: linear-gradient(135deg, #ffffff 0%, #faf9ff 100%);
   border-top: 1px solid rgba(106, 11, 223, 0.08);

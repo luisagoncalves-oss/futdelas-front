@@ -12,6 +12,8 @@ export interface Event {
     season: Season;
     status: Status;
     roundInfo: RoundInfo;
+    homeScore: HomeScore;
+    awayScore: HomeScore;
 }
 
 export interface Season {
@@ -28,4 +30,12 @@ export interface Status {
 
 export interface RoundInfo {
     round: number;
+}
+
+export interface HomeScore {
+    current: number;
+    display: number;
+    period1: number;
+    period2: number;
+    normaltime: number;
 }

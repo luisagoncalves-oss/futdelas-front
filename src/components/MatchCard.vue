@@ -30,7 +30,7 @@
           </div>
           <span class="team-name">{{ match.homeTeam?.name }}</span>
           <div class="team-stats" v-if="showScore">
-            <span class="stat-value">{{ match.homeScore || 0 }}</span>
+            <span class="stat-value">{{ match.homeScore.current || 0 }}</span>
           </div>
         </div>
 
@@ -57,7 +57,7 @@
           </div>
           <span class="team-name">{{ match.awayTeam?.name }}</span>
           <div class="team-stats" v-if="showScore">
-            <span class="stat-value">{{ match.awayScore || 0 }}</span>
+            <span class="stat-value">{{ match.awayScore.current || 0 }}</span>
           </div>
         </div>
       </div>

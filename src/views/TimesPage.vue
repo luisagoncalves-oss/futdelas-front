@@ -17,7 +17,6 @@ import { onMounted, ref } from 'vue';
 import TeamCard from '@/components/TeamCard.vue';
 import { FavoriteTeam } from '@/api/types/favoriteTeam.type';
 
-// Mock data baseado no JSON fornecido
 const mockTeamsData: Team[] = [
   {
     "teamId": "dbf91e51-3f6e-4b9a-bc98-aaa23b9c98aa",
@@ -201,10 +200,8 @@ const times = ref<Team[]>([]);
 const timeFavorito = ref<FavoriteTeam | null>(null);
 const userId = '12345';
 
-// Função mock para buscar times
 const fetchTeams = async () => {
   try {
-    // Simula delay de rede
     await new Promise(resolve => setTimeout(resolve, 500));
     times.value = mockTeamsData;
   } catch (error) {
@@ -213,14 +210,10 @@ const fetchTeams = async () => {
   }
 }
 
-// Função mock para buscar time favorito
 const fetchFavoriteTeam = async () => {
   try {
-    // Simula delay de rede
     await new Promise(resolve => setTimeout(resolve, 300));
     
-    // Para demonstração, vamos simular que o Corinthians é o favorito
-    // Em uma aplicação real, isso viria do localStorage ou banco de dados
     const favoriteFromStorage = localStorage.getItem(`favoriteTeam_${userId}`);
     
     if (favoriteFromStorage) {

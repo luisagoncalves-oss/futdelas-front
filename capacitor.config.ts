@@ -7,10 +7,7 @@ const config: CapacitorConfig = {
   server: {
     androidScheme: 'https',
     cleartext: true,
-    allowNavigation: [
-      'https://futdelas-api.onrender.com',
-      '*.onrender.com'
-    ]
+    allowNavigation: ['*']
   }
 };
 export default config;

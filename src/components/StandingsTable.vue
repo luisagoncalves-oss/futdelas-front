@@ -34,9 +34,7 @@
             </span>
           </div>
           <div class="coluna-time">
-            <div class="time-info">
-              <span class="nome-time">{{ row.team?.name }}</span>
-            </div>
+            <span class="nome-time">{{ row.team?.name }}</span>
           </div>
           <div class="coluna-numero">{{ row.matches }}</div>
           <div class="coluna-numero">{{ row.wins }}</div>
@@ -81,47 +79,57 @@ const getPositionBadgeClass = (position: number): string => {
 
 <style scoped>
 .card-classificacao {
-  border-radius: 16px;
-  margin: 16px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  margin: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   border: 1px solid rgba(0, 0, 0, 0.08);
   background: #fff;
   overflow: hidden;
 }
 
 .card-title {
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 700;
   color: #1e1e1e;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-  padding-bottom: 8px;
+  padding-bottom: 6px;
 }
 
 .tabela-container {
   width: 100%;
-  overflow: auto;
-  border-radius: 12px;
+  overflow-x: auto;
+  border-radius: 8px;
   background: #fff;
+  -webkit-overflow-scrolling: touch;
+}
+
+.cabecalho-tabela,
+.linha-time {
+  display: grid;
+  grid-template-columns: 32px minmax(120px, 1fr) 28px 28px 28px 28px 28px 28px 36px;
+  gap: 4px;
+  align-items: center;
+  min-width: fit-content;
 }
 
 .cabecalho-tabela {
-  display: flex;
   background: #f5f5f7;
   color: #4b4b4b;
-  padding: 12px;
+  padding: 8px 6px;
   font-weight: 600;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   letter-spacing: 0.2px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 .linha-time {
-  display: flex;
-  align-items: center;
-  padding: 10px 12px;
+  padding: 8px 6px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   transition: background 0.2s ease;
 }
 
@@ -132,14 +140,30 @@ const getPositionBadgeClass = (position: number): string => {
 .coluna-posicao,
 .coluna-numero,
 .coluna-pontos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   font-weight: 600;
 }
 
-.coluna-posicao { flex: 0.5; }
-.coluna-time { flex: 3; min-width: 0; }
-.coluna-numero { flex: 0.8; color: #333; }
-.coluna-pontos { flex: 1; color: #6A0BDF; }
+.coluna-time {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  padding: 0 8px;
+  text-align: left;
+}
+
+.coluna-numero {
+  color: #333;
+  font-size: 0.7rem;
+}
+
+.coluna-pontos {
+  color: #6A0BDF;
+  font-weight: 700;
+}
 
 .nome-time {
   white-space: nowrap;
@@ -147,16 +171,17 @@ const getPositionBadgeClass = (position: number): string => {
   text-overflow: ellipsis;
   font-weight: 500;
   color: #222;
+  width: 100%;
 }
 
 .position-badge {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 6px;
-  font-size: 0.75rem;
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  font-size: 0.7rem;
   font-weight: 600;
   color: #fff;
 }
@@ -165,4 +190,62 @@ const getPositionBadgeClass = (position: number): string => {
 .position-badge.playoff { background: #f39c12; }
 .position-badge.relegation { background: #eb445a; }
 .position-badge.neutral { background: #a0a0a0; }
+
+@media (min-width: 576px) {
+  .card-classificacao {
+    margin: 16px;
+    border-radius: 16px;
+  }
+
+  .card-title {
+    font-size: 1.1rem;
+    padding-bottom: 8px;
+  }
+
+  .cabecalho-tabela,
+  .linha-time {
+    grid-template-columns: 40px minmax(140px, 1fr) 32px 32px 32px 32px 32px 32px 40px;
+    gap: 6px;
+  }
+
+  .cabecalho-tabela {
+    padding: 12px 8px;
+    font-size: 0.75rem;
+  }
+
+  .linha-time {
+    padding: 10px 8px;
+    font-size: 0.8rem;
+  }
+
+  .coluna-numero {
+    font-size: 0.75rem;
+  }
+
+  .position-badge {
+    width: 22px;
+    height: 22px;
+    font-size: 0.75rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .cabecalho-tabela,
+  .linha-time {
+    grid-template-columns: 45px minmax(160px, 1fr) 36px 36px 36px 36px 36px 36px 45px;
+    gap: 8px;
+  }
+
+  .cabecalho-tabela {
+    font-size: 0.8rem;
+  }
+
+  .linha-time {
+    font-size: 0.85rem;
+  }
+
+  .coluna-numero {
+    font-size: 0.8rem;
+  }
+}
 </style>
