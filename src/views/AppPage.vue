@@ -4,13 +4,13 @@
       <ion-toolbar>
         <div class="header-content">
           <div class="logo-container">
-            <h1 class="app-name">Futdelas</h1>
+            <h1 class="app-name">FutDelas</h1>
           </div>
         </div>
       </ion-toolbar>
     </ion-header>
 
-    <ion-segment value="detalhes" @ionChange="mudarTela($event)" class="tab-segment">
+    <ion-segment :value="activeScreen" @ionChange="changeScreen($event)" class="tab-segment">
       <ion-segment-button value="detalhes" class="segment-button">
         <ion-label>Detalhes</ion-label>
       </ion-segment-button>
@@ -22,22 +22,21 @@
       </ion-segment-button>
     </ion-segment>
 
-    <ion-content>
-      <div v-if="telaAtiva === 'detalhes'">
-        <DetalhesPage />
-      </div>
-      <div v-if="telaAtiva === 'partidas'">
-        <PartidasPage />
-      </div>
-      <div v-if="telaAtiva === 'times'">
-        <TimesPage />
-      </div>
+    <ion-content 
+      @touchstart="onTouchStart"
+      @touchend="onTouchEnd"
+      class="swipe-content"
+    >
+      <DetalhesPage v-if="activeScreen === 'detalhes'" />
+      <PartidasPage v-if="activeScreen === 'partidas'" />
+      <TimesPage v-if="activeScreen === 'times'" />
     </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import {
   IonContent,
   IonSegment,
@@ -51,11 +50,70 @@ import DetalhesPage from '@/views/DetalhesPage.vue';
 import PartidasPage from '@/views/PartidasPage.vue';
 import TimesPage from '@/views/TimesPage.vue';
 
-const telaAtiva = ref('detalhes');
+const route = useRoute();
+const router = useRouter();
 
-const mudarTela = (ev: CustomEvent) => {
-  telaAtiva.value = ev.detail.value;
+// Screens disponíveis
+const screens = ['detalhes', 'partidas', 'times'];
+
+// Tab ativa baseada no parâmetro da rota
+const activeScreen = computed(() => {
+  const routeTab = route.params.tab as string;
+  return screens.includes(routeTab) ? routeTab : 'detalhes';
+});
+
+// Índice atual para o swipe
+const currentIndex = computed(() => screens.indexOf(activeScreen.value));
+
+// Variáveis para controle do swipe
+const touchStartX = ref(0);
+const touchStartY = ref(0);
+const touchEndX = ref(0);
+
+const changeScreen = (ev: CustomEvent) => {
+  const newScreen = ev.detail.value;
+  // Navega para a nova tela, atualizando a URL
+  router.push(`/app/${newScreen}`);
 };
+
+const onTouchStart = (event: TouchEvent) => {
+  touchStartX.value = event.touches[0].clientX;
+  touchStartY.value = event.touches[0].clientY;
+};
+
+const onTouchEnd = (event: TouchEvent) => {
+  touchEndX.value = event.changedTouches[0].clientX;
+  
+  const diffX = touchStartX.value - touchEndX.value;
+  const diffY = Math.abs(touchStartY.value - event.changedTouches[0].clientY);
+  
+  const minSwipeDistance = 60;
+  const maxVerticalTolerance = 30; 
+  
+  if (Math.abs(diffX) > minSwipeDistance && diffY < maxVerticalTolerance) {
+    handleSwipe(diffX);
+  }
+};
+
+const handleSwipe = (diffX: number) => {
+  // Swipe para a esquerda (próxima tela)
+  if (diffX > 0 && currentIndex.value < screens.length - 1) {
+    const nextScreen = screens[currentIndex.value + 1];
+    router.push(`/app/${nextScreen}`);
+  }
+  // Swipe para a direita (tela anterior)
+  else if (diffX < 0 && currentIndex.value > 0) {
+    const prevScreen = screens[currentIndex.value - 1];
+    router.push(`/app/${prevScreen}`);
+  }
+};
+
+// Garante que a URL sempre reflita a tela atual
+watch(activeScreen, (newScreen) => {
+  if (newScreen && route.params.tab !== newScreen) {
+    router.replace(`/app/${newScreen}`);
+  }
+});
 </script>
 
 <style scoped>
@@ -73,7 +131,6 @@ const mudarTela = (ev: CustomEvent) => {
   justify-content: center;
   padding: 0 16px;
   height: 72px;
-  position: relative;
 }
 
 .logo-container {
@@ -82,15 +139,13 @@ const mudarTela = (ev: CustomEvent) => {
   gap: 14px;
 }
 
-
 .app-name {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 700;
-  --color: #00000;
+  color: #000000;
 }
 
-/* Segment Button Minimalista */
 .tab-segment {
   --background: transparent;
   border-bottom: 1px solid rgba(106, 11, 223, 0.08);
@@ -100,31 +155,24 @@ const mudarTela = (ev: CustomEvent) => {
   --background: transparent;
   --background-checked: transparent;
   --color: #6c757d;
-  --color-checked: #6a0bdf;
+  --color-checked: #542583;
   --border-radius: 0;
   --padding-start: 8px;
   --padding-end: 8px;
   --padding-top: 12px;
   --padding-bottom: 12px;
   margin: 0;
-  border: none;
   position: relative;
   font-weight: 500;
-  transition: all 0.2s ease;
 }
 
 .segment-button::part(native) {
   border-radius: 0;
-  background: transparent !important;
-}
-
-.segment-button:hover {
-  --color: #2d1b69;
-  background: rgba(106, 11, 223, 0.04);
+  background: transparent;
 }
 
 .segment-button.segment-button-checked {
-  --color: #6a0bdf;
+  --color: #542583;
   font-weight: 600;
 }
 
@@ -135,7 +183,7 @@ const mudarTela = (ev: CustomEvent) => {
   left: 12px;
   right: 12px;
   height: 3px;
-  background: linear-gradient(135deg, #6a0bdf 0%, #8e44ad 100%);
+  background: #542583;
   border-radius: 2px 2px 0 0;
 }
 
@@ -144,7 +192,6 @@ const mudarTela = (ev: CustomEvent) => {
   letter-spacing: 0.2px;
 }
 
-/* Responsividade para mobile */
 @media (max-width: 768px) {
   .header-content {
     height: 64px;
@@ -155,18 +202,8 @@ const mudarTela = (ev: CustomEvent) => {
     gap: 12px;
   }
 
-  .logo-icon {
-    width: 42px;
-    height: 42px;
-    font-size: 22px;
-  }
-
   .app-name {
     font-size: 1.3rem;
-  }
-
-  .tab-segment {
-    padding: 0 12px;
   }
 
   .segment-button ion-label {
@@ -190,19 +227,8 @@ const mudarTela = (ev: CustomEvent) => {
     gap: 10px;
   }
 
-  .logo-icon {
-    width: 38px;
-    height: 38px;
-    font-size: 20px;
-  }
-
   .app-name {
     font-size: 1.2rem;
-  }
-
-  .tab-segment {
-    padding: 0 8px;
-    min-height: 40px;
   }
 
   .segment-button {
@@ -210,7 +236,6 @@ const mudarTela = (ev: CustomEvent) => {
     --padding-end: 4px;
     --padding-top: 8px;
     --padding-bottom: 8px;
-    min-height: 36px;
   }
 
   .segment-button ion-label {
@@ -222,39 +247,5 @@ const mudarTela = (ev: CustomEvent) => {
     right: 6px;
     height: 2px;
   }
-}
-
-@media (max-width: 360px) {
-  .app-name {
-    font-size: 1.1rem;
-  }
-
-  .logo-icon {
-    width: 36px;
-    height: 36px;
-    font-size: 18px;
-  }
-
-  .segment-button {
-    --padding-start: 3px;
-    --padding-end: 3px;
-    min-height: 34px;
-  }
-
-  .segment-button ion-label {
-    font-size: 0.75rem;
-  }
-}
-
-/* Melhorias de acessibilidade */
-.segment-button:focus {
-  outline: 2px solid rgba(106, 11, 223, 0.3);
-  outline-offset: -2px;
-}
-
-.logo-container:focus {
-  outline: 2px solid rgba(106, 11, 223, 0.5);
-  outline-offset: 4px;
-  border-radius: 24px;
 }
 </style>

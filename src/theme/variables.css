@@ -25,6 +25,8 @@
   --ion-letter-spacing-tight: -0.01em;
   --ion-letter-spacing-normal: 0;
   --ion-letter-spacing-wide: 0.01em;
+  
+  --ion-color-primary: #542583;
 }
 
 * {
@@ -41,8 +43,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
-
-
 
 .font-inter {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Roboto', sans-serif;
@@ -136,16 +136,6 @@ ion-button {
   max-width: 65ch;
 }
 
-@media (prefers-color-scheme: dark) {
-  body {
-    font-weight: var(--ion-font-weight-light);
-  }
-  
-  .text-long {
-    line-height: var(--ion-line-height-relaxed);
-  }
-}
-
 @media (max-width: 768px) {
   :root {
     --ion-base-font-size: 15px;
@@ -167,21 +157,6 @@ ion-button {
   ion-card-title {
     font-size: var(--ion-font-size-lg);
   }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .smooth-font {
-    transition: font-size 0.2s ease, line-height 0.2s ease;
-  }
-}
-
-@media (prefers-contrast: high) {
-  body {
-    font-weight: var(--ion-font-weight-medium);
-  }
-}
-:root {
-  --ion-color-primary: #5706BA;
 }
 
 ion-label {

@@ -1,174 +1,135 @@
 <template>
-  <ion-page>
-    <ion-content>
-      <MatchCard 
-        v-for="event in paginatedEvents" 
-        :key="event.id" 
-        :match="event" 
-        @shareMatch="share(event)"
+  <div v-if="loading && !lastMatches" class="loading">
+    <Text 
+      content="Carregando partidas..." 
+      element="span" 
+      size="sm" 
+      weight="regular" 
+      color="dark"
+    />
+  </div>
+
+  <div v-else-if="error" class="error">
+    <Text 
+      content="Erro ao carregar partidas." 
+      element="span" 
+      size="sm" 
+      weight="regular" 
+      color="dark"
+    />
+    <button @click="handleRetry" class="retry-button">
+      Tentar novamente
+    </button>
+  </div>
+
+  <div v-else>
+    <MatchCard 
+      v-for="match in lastMatches?.events || []" 
+      :key="match.id" 
+      :match="match"
+    />
+
+    <div v-if="lastMatches && lastMatches.events.length > 0" class="pagination">
+      <ion-button 
+        @click="goToPreviousPage"
+        :disabled="currentPage === 0 || loading"
+        fill="clear"
+        size="small"
+      >
+        <ion-icon :icon="chevronBack" slot="icon-only" />
+      </ion-button>
+
+      <Text 
+        :content="'Página ' + (currentPage + 1)" 
+        element="span" 
+        size="sm" 
+        weight="regular" 
+        color="dark"
       />
 
-      <ion-footer class="ion-no-border">
-        <ion-toolbar>
-          <ion-buttons slot="start">
-            <ion-button 
-              fill="clear" 
-              :disabled="currentPage === 1" 
-              @click="goToPreviousPage"
-            >
-              <ion-icon name="chevron-back-outline"></ion-icon>
-              <ion-label>Anterior</ion-label>
-            </ion-button>
-          </ion-buttons>
-
-          <ion-title class="ion-text-center">
-            {{ currentPage }}
-          </ion-title>
-
-          <ion-buttons slot="end">
-            <ion-button 
-              fill="clear" 
-              :disabled="!hasNextPage" 
-              @click="goToNextPage"
-            >
-              <ion-label>Próxima</ion-label>
-              <ion-icon name="chevron-forward-outline"></ion-icon>
-            </ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-footer>
-    </ion-content>
-  </ion-page>
+      <ion-button 
+        @click="goToNextPage"
+        :disabled="!lastMatches.hasNextPage || loading"
+        fill="clear"
+        size="small"
+      >
+        <ion-icon :icon="chevronForward" slot="icon-only" />
+      </ion-button>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { 
-  IonPage, 
-  IonContent, 
-  IonFooter, 
-  IonToolbar, 
-  IonButtons, 
-  IonButton, 
-  IonIcon, 
-  IonLabel, 
-  IonTitle 
-} from '@ionic/vue';
-import { onMounted, ref, computed } from 'vue';
-import MatchCard from '@/components/MatchCard.vue';
-import { Share } from '@capacitor/share';
-import { EventsResponse, Event } from '@/api/types/tournament-last-matches.type';
-import { TournamentService } from '@/api/tournament.service';
+import { onMounted } from 'vue';
+import { IonButton, IonIcon } from '@ionic/vue';
+import { chevronBack, chevronForward } from 'ionicons/icons';
+import MatchCard from '@/match/index.component.vue';
+import { useMatch } from '@/match/composables/useMatch';
+import Text from '@/components/text/index.component.vue';
 
-const currentPage = ref(1);
-const allEvents = ref<Event[]>([]); 
-const hasNextPageData = ref(false);
-const isLoading = ref(false);
+const {
+  lastMatches,
+  loading,
+  error,
+  currentPage,
+  fetchLastMatches,
+  clearError
+} = useMatch();
 
-const paginatedEvents = computed(() => {
-  return allEvents.value;
-});
-
-const hasNextPage = computed(() => {
-  return hasNextPageData.value;
-});
-
-const fetchTournamentLastMatches = async (page: number = 1) => {
-  try {
-    isLoading.value = true;
-    
-    const pageIndex = page - 1;
-    
-    const response: EventsResponse = await TournamentService.getLastMatches(pageIndex);
-    
-    allEvents.value = response.events;
-    hasNextPageData.value = response.hasNextPage;
-    currentPage.value = page;
-    
-  } catch (error) {
-    console.error("Erro ao buscar partidas:", error);
-  } finally {
-    isLoading.value = false;
+const goToNextPage = () => {
+  if (lastMatches.value?.hasNextPage) {
+    fetchLastMatches(currentPage.value + 1);
   }
 };
 
-const goToNextPage = async () => {
-  if (hasNextPage.value) {
-    await fetchTournamentLastMatches(currentPage.value + 1);
+const goToPreviousPage = () => {
+  if (currentPage.value > 0) {
+    fetchLastMatches(currentPage.value - 1);
   }
 };
 
-const goToPreviousPage = async () => {
-  if (currentPage.value >= 1) {
-    await fetchTournamentLastMatches(currentPage.value - 1);
-  }
-};
-
-const share = async (match: Event) => {
-  try {
-    const statusMap: Record<string, string> = {
-      'Ended': 'Encerrado',
-      'Finished': 'Encerrado',
-      'Live': 'Ao Vivo',
-      'Scheduled': 'Agendado',
-      'Postponed': 'Adiado',
-      'Cancelled': 'Cancelado'
-    };
-
-    const status = statusMap[match.status.description] || match.status.description;
-    
-    const placar = match.homeScore && match.awayScore 
-      ? `${match.homeScore.display} × ${match.awayScore.display}`
-      : 'vs';
-
-    const shareText = `${match.homeTeam.name} ${placar} ${match.awayTeam.name}
-
-${match.season.name} • Rodada ${match.roundInfo.round}
-Status: ${status}
-
-───
-Acompanhe o campeonato completo no FutDelas
-Resultados, classificação e estatísticas do futebol feminino brasileiro
-
-#FutebolFeminino #BrasileirãoFeminino`;
-
-    await Share.share({
-      title: 'FutDelas | Brasileirão Feminino',
-      text: shareText,
-      dialogTitle: 'Compartilhar'
-    });
-    
-  } catch (e) {
-    console.error("Erro ao compartilhar partida:", e);
-  }
+const handleRetry = () => {
+  clearError();
+  fetchLastMatches(0);
 };
 
 onMounted(() => {
-  fetchTournamentLastMatches(1);
+  fetchLastMatches(0);
 });
 </script>
 
 <style scoped>
-ion-footer {
-  background: linear-gradient(135deg, #ffffff 0%, #faf9ff 100%);
-  border-top: 1px solid rgba(106, 11, 223, 0.08);
+.loading, .error {
+  text-align: center;
+  padding: 40px;
+  color: var(--ion-color-medium);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
 }
 
-ion-toolbar {
-  --background: transparent;
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 24px 0;
+  padding: 0 16px;
 }
 
-ion-button {
-  --color: #6a0bdf;
-  font-weight: 600;
+.retry-button {
+  background: none;
+  border: none;
+  color: var(--ion-color-primary);
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: opacity 0.2s ease;
 }
 
-ion-button:disabled {
-  --color: #6c757d;
-  opacity: 0.5;
-}
-
-ion-title {
-  font-weight: 600;
-  color: #2d1b69;
+.retry-button:hover {
+  opacity: 0.7;
 }
 </style>

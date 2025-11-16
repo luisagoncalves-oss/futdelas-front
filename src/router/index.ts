@@ -13,26 +13,25 @@ const routes: Array<RouteRecordRaw> = [
     children: [
       {
         path: '',
-        redirect: { name: 'detalhes' }
+        redirect: { name: 'tab', params: { tab: 'detalhes' } }
       },
       {
-        path: 'detalhes',
-        name: 'detalhes',
-        component: () => import('@/views/DetalhesPage.vue')
-      },
-      {
-        path: 'partidas', 
-        name: 'partidas',
-        component: () => import('@/views/PartidasPage.vue')
-      },
-      {
-        path: 'times',
-        name: 'times',
-        component: () => import('@/views/TimesPage.vue')
+        path: ':tab',
+        name: 'tab',
+        component: () => import('@/views/AppPage.vue'),
+        beforeEnter: (to) => {
+          const validTabs = ['detalhes', 'partidas', 'times'];
+          const tab = to.params.tab as string;
+          
+          if (!validTabs.includes(tab)) {
+            return { name: 'tab', params: { tab: 'detalhes' } };
+          }
+        }
       }
     ]
   }
 ]
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes
