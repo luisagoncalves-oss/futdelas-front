@@ -60,34 +60,6 @@ class ApiClient {
     }
     return this.client.get<T>(url, config);
   }
-
-  async post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
-    if (Capacitor.isNativePlatform()) {
-      return this.nativeRequest<T>('POST', url, data, config);
-    }
-    return this.client.post<T>(url, data, config);
-  }
-
-  async put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
-    if (Capacitor.isNativePlatform()) {
-      return this.nativeRequest<T>('PUT', url, data, config);
-    }
-    return this.client.put<T>(url, data, config);
-  }
-
-  async delete<T = any>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
-    if (Capacitor.isNativePlatform()) {
-      return this.nativeRequest<T>('DELETE', url, undefined, config);
-    }
-    return this.client.delete<T>(url, config);
-  }
-
-  async patch<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
-    if (Capacitor.isNativePlatform()) {
-      return this.nativeRequest<T>('PATCH', url, data, config);
-    }
-    return this.client.patch<T>(url, data, config);
-  }
 }
 
 export const apiClient = new ApiClient();
